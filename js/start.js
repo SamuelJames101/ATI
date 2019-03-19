@@ -117,3 +117,5 @@ function deleteClicked(e){
 function toggleHidden(rowButtons) {
   rowButtons.find("a").toggleClass("hidden");
 }
+
+//ignore
