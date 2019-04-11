@@ -1,0 +1,66 @@
+<%- include partials/Header.ejs %>
+
+<div id = "header">
+  <h1>Eggplant Remote Script</h1>
+</div>
+
+<div id = "body">
+  <div id = "box">
+    <div id = "topBox">
+      <table id="deviceTable">
+        <tr>
+          <th>ID</th>
+          <th>Friendly Name</th>
+          <th>Model Name</th>
+          <th>Port</th>
+          <th>OS</th>
+          <th>OS Version</th>
+          <th>Connected</th>
+        </tr>
+        <%for (var device of locals.deviceList) {%>
+          <tr class = "row_<%=device.ID%>" id = "<%=device.ID%>">
+          <td class = "inputable" ><%=device.ID%></td>
+          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.name%></td>
+          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.model_name%></td>
+          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.port%></td>
+          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os%></td>
+          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os_version%></td>
+          <td class = "inputable onOff"  data-deviceid="<%=device.ID%>"> <%= device.connection === 1 ?  "on" : "off" %></td>
+        </tr>
+        <% } %>
+      </table>
+    </div>
+
+    <div id = "middleBox">
+      <form action="/device/add" method="post">
+        <input type="text" name="friendlyName">
+        <input type="text" name="modelName">
+        <input type="text" name="port">
+        <input type="text" name="os">
+        <input type="text" name="osVersion">
+        <input type="checkbox" name="connected">
+        <input class="interaction" type="submit" value="Submit">
+      </form>
+    </div>
+
+    <div id = "bottomBox">
+      <div class = "errorsBox">
+        <h3>Errors:</h3>
+        <% if (locals.error){ %>
+          <% console.log(locals) %>
+          <p class = "errorNote"><%=locals.error%></p>
+        <%  }%>
+      </div>
+
+      <div class = "button" data-deviceid="<%=device.ID%>">
+        <button class="deletebtn" href="#" disabled>Delete</button>
+        <button class="cancelbtn hidden" href="#" disabled>Cancel</button>
+        <button class="editbtn" href="#" disabled >Edit</button>
+        <button class="savebtn hidden" href="#" disabled>Save</button>
+        <button class="startbtn" href="#" disabled>Start</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include partials/Footer.ejs %>
