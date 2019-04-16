@@ -3,6 +3,7 @@ import {commandController} from "../Controllers/commandController";
 
 const routes = express.Router();
 
-routes.get('/', commandController.startEggplant)
+routes.post('/', commandController.startEggplant)
+
 
 module.exports = routes;
