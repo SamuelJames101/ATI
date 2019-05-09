@@ -1,66 +1,134 @@
 <%- include partials/Header.ejs %>
 
 <div id = "header">
+  <select>
+    <option value=""></option>
+  </select>
+  <h3></h3>
   <h1>Eggplant Remote Script</h1>
 </div>
 
 <div id = "body">
-  <div id = "box">
-    <div id = "topBox">
-      <table id="deviceTable">
-        <tr>
-          <th>ID</th>
-          <th>Friendly Name</th>
-          <th>Model Name</th>
-          <th>Port</th>
-          <th>OS</th>
-          <th>OS Version</th>
-          <th>Connected</th>
-        </tr>
-        <%for (var device of locals.deviceList) {%>
-          <tr class = "row_<%=device.ID%>" id = "<%=device.ID%>">
-          <td class = "inputable" ><%=device.ID%></td>
-          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.name%></td>
-          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.model_name%></td>
-          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.port%></td>
-          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os%></td>
-          <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os_version%></td>
-          <td class = "inputable onOff"  data-deviceid="<%=device.ID%>"> <%= device.connection === 1 ?  "on" : "off" %></td>
-        </tr>
-        <% } %>
-      </table>
+  <div id="boxContainer">
+    <div id = "box" class="outerBox">
+      <div id = "topBox">
+        <table id="deviceTable">
+          <tr>
+            <th>ID</th>
+            <th>Friendly Name</th>
+            <th>Model Name</th>
+            <th>Port</th>
+            <th>OS</th>
+            <th>OS Version</th>
+            <th>Connected</th>
+          </tr>
+          <%for (var device of locals.deviceList) {%>
+            <tr class = "row_<%=device.ID%>" id = "<%=device.ID%>">
+            <td class = "inputable" ><%=device.ID%></td>
+            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.name%></td>
+            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.model_name%></td>
+            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.port%></td>
+            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os%></td>
+            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os_version%></td>
+            <td class = "inputable onOff"  data-deviceid="<%=device.ID%>"> <%= device.connection === 1 ?  "on" : "off" %></td>
+          </tr>
+          <% } %>
+        </table>
+      </div>
+
+      <div id = "middleBox">
+        <form action="/device/add" method="post">
+          <input type="text" name="friendlyName">
+          <input type="text" name="modelName">
+          <input type="text" name="port">
+          <input type="text" name="os">
+          <input type="text" name="osVersion">
+          <input type="checkbox" name="connected">
+          <input class="interaction" type="submit" value="Submit">
+        </form>
+      </div>
+
+      <div id = "bottomBox">
+        <div class = "errorsBox">
+          <h3>Errors:</h3>
+          <% if (locals.error){ %>
+            <% console.log(locals) %>
+            <p class = "errorNote"><%=locals.error%></p>
+          <%  }%>
+        </div>
+
+        <div class = "button" data-deviceid="<%=device.ID%>">
+          <button class="deletebtn" href="#" disabled>Delete</button>
+          <button class="cancelbtn hidden" href="#" disabled>Cancel</button>
+          <button class="editbtn" href="#" disabled >Edit</button>
+          <button class="savebtn hidden" href="#" disabled>Save</button>
+          <button class="startbtn" href="#" disabled>Start</button>
+          <button class="autostartbtn" href="#" disabled>Auto Start</button>
+        </div>
+      </div>
     </div>
 
-    <div id = "middleBox">
-      <form action="/device/add" method="post">
-        <input type="text" name="friendlyName">
-        <input type="text" name="modelName">
-        <input type="text" name="port">
-        <input type="text" name="os">
-        <input type="text" name="osVersion">
-        <input type="checkbox" name="connected">
-        <input class="interaction" type="submit" value="Submit">
+    <div id="autostartmodal" class="modal">
+      <div class="modalcontent">
+        <p class="popupphoneselected"></p>
+        <form class="test" action="/start/auto" method="post">
+          <select name="time">
+            <option value="17">17:00</option>
+            <option value="18">18:00</option>
+            <option value="19">19:00</option>
+            <option value="20">20:00</option>
+            <option value="21">21:00</option>
+            <option value="22">22:00</option>
+            <option value="23">23:00</option>
+            <option value="24">24:00</option>
+            <option value="01">01:00</option>
+            <option value="02">02:00</option>
+            <option value="03">03:00</option>
+            <option value="04">04:00</option>
+            <option value="05">05:00</option>
+            <option value="06">06:00</option>
+            <option value="07">07:00</option>
+          </select>
+          <input id="deviceport" name="deviceport" hidden />
+          <input id="auto-device-id" name="deviceID" hidden />
+          <input class="autostartsubmitbutton" type="submit" value="Submit">
       </form>
-    </div>
-
-    <div id = "bottomBox">
-      <div class = "errorsBox">
-        <h3>Errors:</h3>
-        <% if (locals.error){ %>
-          <% console.log(locals) %>
-          <p class = "errorNote"><%=locals.error%></p>
-        <%  }%>
-      </div>
-
-      <div class = "button" data-deviceid="<%=device.ID%>">
-        <button class="deletebtn" href="#" disabled>Delete</button>
-        <button class="cancelbtn hidden" href="#" disabled>Cancel</button>
-        <button class="editbtn" href="#" disabled >Edit</button>
-        <button class="savebtn hidden" href="#" disabled>Save</button>
-        <button class="startbtn" href="#" disabled>Start</button>
+      <span class="close">&times;</span>
       </div>
     </div>
+
+    <div id="tabBox">
+      <div class="rightBox outerbox" id="settingsTab">
+        <p class="settingsTabIcon">&#4967;</p>
+        <h4>Settings</h4>
+        <form id="ipAddress" action="/IP/change" method="post">
+          <input type="text" name="ipAddress">
+          <input class="ipSubmit" type="submit" value="Submit">
+        </form>
+        <form id="ipAddress" action="/IP/change" method="post">
+          <select>
+            <%# loop %>
+            <option value=""></option>
+            <input class="appSubmit" type="submit" value="Submit">
+          </select>
+        </form>
+      </div>
+
+      <div class = "rightBox outerBox" id="autoTab">
+        <p class="autoDeviceTabNumber"><%=locals.cronList.length%></p>
+        <h4>Automated Scripts</h4>
+        <%for (var job of locals.cronList) {%>
+          <table class = "autodevicetable" data-autodeviceid="<%=job.deviceID%>">
+              <tr class="autodevicerunning" data-autoDeviceID="<%=job.deviceID%>"> <td> ID: <%=job.deviceID%> </td> </tr>
+              <tr class="autorunning"> <td> Status: <%=job.status%></td></tr>
+              <tr class="autotime"> <td> Time: <%=job.time%> </td> </tr>
+          </table>
+        <% } %>
+        <button class="stopautorun autoScriptButton" disabled>Stop</button>
+        <button class="deleteautorun autoScriptButton" disabled>Delete</button>
+      </div>
   </div>
+</div>
 </div>
 
 <%- include partials/Footer.ejs %>

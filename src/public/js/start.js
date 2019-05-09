@@ -1,5 +1,6 @@
 let oldData = {};
 let selectedRowID;
+let selectedautoDeviceTableID;
 let editToggleClicked = true;
 let tdmappings = {
   name: 0, model_name: 1, port: 2, os: 3, os_version: 4, connection: 5
@@ -10,6 +11,11 @@ $('.cancelbtn').on("click", cancelClicked);
 $('.savebtn').on("click", saveClicked);
 $('.deletebtn').on("click", deleteClicked);
 $('.startbtn').on("click", startClicked);
+$('.autostartbtn').on("click", autoStartClicked);
+$('.autostartsubmitbutton').on("click", autoStartSubmitClicked);
+$('.close').on("click", autoStartCloseClicked);
+$('.stopautorun').on("click", autoStartedDeviceStop);
+$('.deleteautorun').on("click", autoStartedDeviceDelete);
 
 for (let i=1; i< $('#deviceTable tr').length; i++){
   let rowNumber = $('#deviceTable tr')[i];
@@ -25,14 +31,31 @@ function rowClicked(elm){
   };
 
   if (editToggleClicked) {
-    console.log(editToggleClicked);
-    elm.classList.add('highlight')
+    elm.classList.add('highlight');
     selectedRowID = $(elm).attr('id');
     $("button").attr("disabled", false);
   };
 };
 
+for (let i=0; i< $('.autodevicetable').length; i++){
+  console.log(i);
+  let tableNumber = $('.autodevicetable')[i];
+  $(tableNumber).on("click", function(){
+    autoDeviceTableClicked(this);
+  })
+};
+
+function autoDeviceTableClicked(elm){
+  for (let i=1; i< $('.autodevicetable').length; i++){
+    $('.autodevicetable')[i].classList.remove('highlight')
+  };
+  elm.classList.add('highlight');
+  selectedautoDeviceTableID = $(elm).data("autodeviceid");
+  $(".autoScriptButton").attr("disabled", false);
+}
+
 function startClicked(e){
+  console.log("clicked works")
   let deviceID = selectedRowID;
   let rowArray = $(`[data-deviceid=${deviceID}]`);
   let portNumber = $(rowArray)[2].innerText
@@ -162,6 +185,45 @@ function deleteClicked(e){
       $(`.row_${id}`).remove();
     }else {
       $('#deviceUpdateErrors'.text(`Errors:${error}`))
+    }
+  })
+}
+
+function autoStartClicked(e){
+  $(".popupphoneselected").html(`<p class="popupphoneselected">Device ID Selected: ${selectedRowID}</p>`);
+
+  let deviceID = selectedRowID;
+  let rowArray = $(`[data-deviceid=${deviceID}]`);
+  let portNumber = $(rowArray)[2].innerText
+
+  $("#auto-device-id").val(deviceID);
+  $("#deviceport").val(portNumber);
+  $('#autostartmodal').css("display", "block");
+}
+
+function autoStartSubmitClicked(e){
+  $('#autostartpopup').toggleClass("popuphidden");
+}
+
+function autoStartCloseClicked(e){
+  $('#autostartmodal').css("display", "none");
+}
+
+function autoStartedDeviceStop(e){
+  $.post('start/auto/stop', {deviceID:selectedautoDeviceTableID}, function(data, working){
+    console.log(data);
+    let test = $(`[data-autodeviceid=${selectedautoDeviceTableID}]`);
+    test.find('.autorunning td')[0].innerText="Status: Not Running";
+  })
+}
+
+function autoStartedDeviceDelete(e){
+  let test = $(`[data-autodeviceid=${selectedautoDeviceTableID}]`);
+  $.post('start/auto/delete', {deviceID:selectedautoDeviceTableID}, function(data, working){
+    console.log(data.list);
+    if (data.deleted){
+      test.remove();
+      $(".autoDeviceTabNumber").html(`<p class="autoDeviceTabNumber">${data.list.length}</p>`);
     }
   })
 }

@@ -6,12 +6,14 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "body-parser": "^1.18.3",
+    "cron-job-manager": "^2.1.1",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-generator": "^4.16.0",
     "jquery": "^3.3.1",
     "mysql": "^2.16.0",
     "node-cmd": "^3.0.0",
+    "node-cron": "^2.0.3",
     "nodemon": "^1.18.10",
     "tabulator-tables": "^4.2.1"
   },

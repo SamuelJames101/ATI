@@ -1,5 +1,5 @@
 import { Device } from '../Models/Device';
-
+import CronManager from '../Models/CronManager';
 
 export class homeController{
 
@@ -8,7 +8,8 @@ export class homeController{
       if(getallError){
         console.log('Could not get devices from device module: ', getallError);
       }else {
-        res.render('home', {deviceList});
+        let cronList = CronManager.getInstance().getCrons();
+        res.render('home', {deviceList, cronList});
       }
     })
   }

@@ -72,7 +72,6 @@ export class DB{
 
   static update (table, data, callback){
     let id = data.id;
-    delete data.id;
     let query = DB.getInstance().format(`UPDATE ${table} SET ? WHERE ID = ${id}`, data);
 
     DB.getInstance().query(query, function (updateError, results, fields){

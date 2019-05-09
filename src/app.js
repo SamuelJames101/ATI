@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import path from 'path';
+import CronManager from "./Models/CronManager"
 var app = express();
 
 app.use('/css', express.static(__dirname + '/public/css'));

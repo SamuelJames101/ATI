@@ -1,4 +1,5 @@
 import { Device } from '../Models/Device';
+import CronManager from '../Models/CronManager';
 
 export class deviceController{
   static getDevice(req, res, next){
@@ -9,7 +10,9 @@ export class deviceController{
         obj.device = gotDevice;
           res.json(obj);
       }else {
+        let cronList = CronManager.getInstance().getCrons();
         obj.error = getDeviceError.sqlMessage;
+        obj.cronList = cronList
         res.render('home', obj);
       }
     })
@@ -36,9 +39,10 @@ export class deviceController{
             console.log(addDeviceError);
             obj.error = addDeviceError.sqlMessage;
           }
+          let cronList = CronManager.getInstance().getCrons();
           obj.deviceList = deviceList;
+          obj.cronList = cronList
           res.render('home', obj);
-          console.log(obj);
         })
     })
   };
