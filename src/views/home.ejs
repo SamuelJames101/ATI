@@ -1,14 +1,10 @@
 <%- include partials/Header.ejs %>
 
-<div id = "header">
-  <select>
-    <option value=""></option>
-  </select>
-  <h3></h3>
-  <h1>Eggplant Remote Script</h1>
-</div>
-
 <div id = "body">
+  <div>
+      <a href="/"> </a>
+      <a href="/"></a>
+  </div>
   <div id="boxContainer">
     <div id = "box" class="outerBox">
       <div id = "topBox">
@@ -22,17 +18,21 @@
             <th>OS Version</th>
             <th>Connected</th>
           </tr>
-          <%for (var device of locals.deviceList) {%>
-            <tr class = "row_<%=device.ID%>" id = "<%=device.ID%>">
-            <td class = "inputable" ><%=device.ID%></td>
-            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.name%></td>
-            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.model_name%></td>
-            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.port%></td>
-            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os%></td>
-            <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os_version%></td>
-            <td class = "inputable onOff"  data-deviceid="<%=device.ID%>"> <%= device.connection === 1 ?  "on" : "off" %></td>
-          </tr>
+          <% console.log(locals.deviceList) %>
+          <% if (locals.deviceList.length) { %>
+            <%for (var device of locals.deviceList) {%>
+              <tr class = "row_<%=device.ID%>" id = "<%=device.ID%>">
+                <td class = "inputable" ><%=device.ID%></td>
+                <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.name%></td>
+                <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.model_name%></td>
+                <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.port%></td>
+                <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os%></td>
+                <td class = "inputable" data-deviceid="<%=device.ID%>"><%=device.os_version%></td>
+                <td class = "inputable onOff"  data-deviceid="<%=device.ID%>"> <%= device.connection === 1 ?  "on" : "off" %></td>
+              </tr>
+            <% } %>
           <% } %>
+
         </table>
       </div>
 
@@ -57,7 +57,7 @@
           <%  }%>
         </div>
 
-        <div class = "button" data-deviceid="<%=device.ID%>">
+        <div class = "button">
           <button class="deletebtn" href="#" disabled>Delete</button>
           <button class="cancelbtn hidden" href="#" disabled>Cancel</button>
           <button class="editbtn" href="#" disabled >Edit</button>

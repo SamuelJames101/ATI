@@ -48,10 +48,13 @@ export class Device {
     console.log(DB)
     DB.getAll(table, function(getAllError, results){
       let deviceList = [];
-      for (let i = 0; i < results.length; i++){
-        let newDevice = new Device(results[i]);
-        deviceList.push(newDevice);
+      if (results !== undefined){
+        for (let i = 0; i < results.length; i++){
+          let newDevice = new Device(results[i]);
+          deviceList.push(newDevice);
+        }
       }
+      console.log(deviceList)
       callback(getAllError, deviceList);
     })
   }

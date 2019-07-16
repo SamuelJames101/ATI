@@ -11,6 +11,6 @@ export class homeController{
         let cronList = CronManager.getInstance().getCrons();
         res.render('home', {deviceList, cronList});
       }
-    })
-  }
+    });
+  };
 }

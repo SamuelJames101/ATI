@@ -1,7 +1,8 @@
 let oldData = {};
+let lastRowClicked;
 let selectedRowID;
 let selectedautoDeviceTableID;
-let editToggleClicked = true;
+let editToggleNotClicked = true;
 let tdmappings = {
   name: 0, model_name: 1, port: 2, os: 3, os_version: 4, connection: 5
 }
@@ -30,10 +31,17 @@ function rowClicked(elm){
     $('#deviceTable tr')[i].classList.remove('highlight')
   };
 
-  if (editToggleClicked) {
-    elm.classList.add('highlight');
-    selectedRowID = $(elm).attr('id');
-    $("button").attr("disabled", false);
+  if (elm == lastRowClicked){
+    lastRowClicked = "reset";
+    elm.classList.remove('highlight');
+    $("button").attr("disabled", true);
+  } else {
+    if (editToggleNotClicked) {
+      elm.classList.add('highlight');
+      selectedRowID = $(elm).attr('id');
+      $("button").attr("disabled", false);
+    };
+    lastRowClicked = elm;
   };
 };
 
@@ -64,7 +72,7 @@ function startClicked(e){
 }
 
 function editClicked(e){
-  editToggleClicked = false;
+  editToggleNotClicked = false;
   for (let i=1; i< $('#deviceTable tr').length; i++){
     $('#deviceTable tr')[i].classList.remove('highlight')
   };
@@ -108,7 +116,7 @@ function cancelClicked(e){
 
   $(".errorNote").remove();
   $("button").attr("disabled", true);
-  editToggleClicked = true;
+  editToggleNotClicked = true;
 
   let deviceID = selectedRowID;
   //let deviceID = $(this).parent().data('deviceid');
@@ -124,7 +132,7 @@ function cancelClicked(e){
 }
 
 function saveClicked(e){
-  editToggleClicked = true;
+  editToggleNotClicked = true;
   let deviceID = selectedRowID;
   //let deviceID = $(this).parent().data('deviceid');
   let rowArray = $(`[data-deviceid=${deviceID}]`);
