@@ -8,7 +8,7 @@
     "body-parser": "^1.18.3",
     "cron-job-manager": "^2.1.1",
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-generator": "^4.16.0",
     "jquery": "^3.3.1",
     "mysql": "^2.16.0",
